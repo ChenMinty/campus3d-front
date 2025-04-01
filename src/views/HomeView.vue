@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { NButton } from 'naive-ui'
 import ModelViewerModal from '@/components/ModelViewerModal.vue'
 
-const currentModel = ref('/models/bonsai-7k-mini.splat')
+const currentModel = ref('/models/point_cloud.splat')
 const viewerRef = ref(null)
 
 const showModel = () => {
