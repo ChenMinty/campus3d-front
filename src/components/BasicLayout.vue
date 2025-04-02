@@ -14,11 +14,16 @@
               :value="activeKey"
               @update:value="handleMenuSelect"
           />
+          <n-dropdown trigger="click" :options="options" @select="handleSelect">
+            <n-button strong secondary type="info">
+              {{ authStore.isLoggedIn ? authStore.username : '未登录' }}
+            </n-button>
+          </n-dropdown>
         </div>
       </n-layout-header>
       <n-layout has-sider position="absolute" style="top: 64px; bottom: 64px">
         <!-- <n-layout-sider bordered content-style="padding: 24px;">
-          海淀桥
+          SiderHere
         </n-layout-sider> -->
         <n-layout content-style="padding: 24px;">
           <router-view/>
@@ -32,10 +37,18 @@
 <script setup>
 import {ref, computed} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
-import {NLayout, NLayoutHeader, NLayoutContent, NMenu, NMessageProvider} from 'naive-ui'
+import {NLayout, NLayoutHeader, NLayoutContent, NMenu, NMessageProvider, NDropdown, NButton} from 'naive-ui'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
 const route = useRoute()
+const authStore = useAuthStore();
+const options = [
+  {
+    label: '退出登陆',
+    key: 'logout'
+  }
+]
 
 // 菜单选项
 const menuOptions = [
@@ -50,6 +63,10 @@ const menuOptions = [
   {
     label: '登陆',
     key: '/login'
+  },
+  {
+    label: '测试',
+    key: '/test'
   }
 ]
 
@@ -59,6 +76,12 @@ const activeKey = computed(() => route.path)
 // 菜单选择处理
 const handleMenuSelect = (key) => {
   router.push(key)
+}
+
+const handleSelect = (key) => {
+  if(key === 'logout') {
+    authStore.logout();
+  }
 }
 </script>
 

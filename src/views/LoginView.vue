@@ -52,9 +52,10 @@ const handleLogin = async() => {
   console.log('登录信息:', loginForm.value)
   try{
     const response = await login(loginForm.value);
-    authStore.login(loginForm.value.id, 'username!!');
+    const {userId, token, username} = response.data;
+    authStore.login(userId, token, username);
     messager.success('登陆成功');
-    router.push('/home')
+    router.push('/home');
   } catch (error) {
     if (error instanceof Error) {
       errorMessage.value = error.message;
