@@ -7,7 +7,7 @@
         <input
             type="text"
             id="id"
-            v-model="registerForm.id"
+            v-model="registerForm.userId"
             required
             placeholder="请输入学工号"
         />
@@ -54,27 +54,37 @@
 <script setup>
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
+import { register } from '@/api/userAPI'
+import { useMessage } from 'naive-ui'
 
-const router = useRouter()
+const router = useRouter();
+const messager = useMessage();
+const errorMessage = ref('');
 
 const registerForm = ref({
-  id: '',
+  userId: '',
   username: '',
   email: '',
   password: ''
-})
+});
 
-const handleRegister = () => {
-  // 这里应该替换为实际的注册API调用
-  console.log('注册信息:', registerForm.value)
-  // 模拟注册成功
-  alert('注册成功!')
-  router.push('/login')
+const handleRegister = async() => {
+  try{
+    const response = await register(registerForm.value);
+    messager.success('注册成功');
+    router.push('/login')
+  } catch (error) {
+    if (error instanceof Error) {
+      errorMessage.value = error.message;
+    } else {
+      errorMessage.value = '未知错误，请稍后重试';
+    }
+    messager.error(errorMessage.value);
+  }
 }
 </script>
 
 <style scoped>
-/* 样式与LoginView相同，可以提取到公共CSS文件中 */
 .auth-container {
   max-width: 400px;
   margin: 2rem auto;

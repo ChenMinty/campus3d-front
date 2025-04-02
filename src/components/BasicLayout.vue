@@ -1,5 +1,6 @@
 <template>
   <div style="height: 100%; width: 100%; position: relative">
+    <n-message-provider>
     <n-layout position="absolute">
       <n-layout-header style="height: 64px;" bordered>
         <div class="header-content">
@@ -24,13 +25,14 @@
         </n-layout>
       </n-layout>
     </n-layout>
+  </n-message-provider>
   </div>
 </template>
 
 <script setup>
 import {ref, computed} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
-import {NLayout, NLayoutHeader, NLayoutContent, NMenu} from 'naive-ui'
+import {NLayout, NLayoutHeader, NLayoutContent, NMenu, NMessageProvider} from 'naive-ui'
 
 const router = useRouter()
 const route = useRoute()

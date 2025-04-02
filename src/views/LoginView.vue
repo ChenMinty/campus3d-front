@@ -7,7 +7,7 @@
         <input
             type="text"
             id="id"
-            v-model="loginForm.id"
+            v-model="loginForm.userId"
             required
             placeholder="请输入学工号"
         />
@@ -34,20 +34,35 @@
 <script setup>
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { login } from '@/api/userAPI'
+import { useMessage } from 'naive-ui'
 
-const router = useRouter()
+const router = useRouter();
+const authStore = useAuthStore();
+const messager = useMessage();
 
 const loginForm = ref({
-  id: '',
+  userId: '',
   password: ''
 })
+const errorMessage = ref('');
 
-const handleLogin = () => {
-  // 这里应该替换为实际的登录API调用
+const handleLogin = async() => {
   console.log('登录信息:', loginForm.value)
-  // 模拟登录成功
-  alert('登录成功!')
-  router.push('/')
+  try{
+    const response = await login(loginForm.value);
+    authStore.login(loginForm.value.id, 'username!!');
+    messager.success('登陆成功');
+    router.push('/home')
+  } catch (error) {
+    if (error instanceof Error) {
+      errorMessage.value = error.message;
+    } else {
+      errorMessage.value = '未知错误，请稍后重试';
+    }
+    messager.error(errorMessage.value);
+  }
 }
 </script>
 
